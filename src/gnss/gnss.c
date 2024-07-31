@@ -45,6 +45,10 @@ static void print_fix_data(struct nrf_modem_gnss_pvt_data_frame *pvt_data)
     {
         LOG_ERR("Failed to print to buffer: %d", err);
     }
+    // capture data to the device state
+    g_device_state.latitude = pvt_data->latitude;
+    g_device_state.longitude = pvt_data->longitude;
+    g_device_state.altitude = pvt_data->altitude;
 }
 
 static void gnss_event_handler(int event)

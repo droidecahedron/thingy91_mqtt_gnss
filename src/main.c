@@ -28,7 +28,15 @@ static K_SEM_DEFINE(lte_connected, 0, 1);
 
 LOG_MODULE_REGISTER(nrf9160_mqtt_simple, LOG_LEVEL_INF);
 
-device_shadow_t g_device_state;
+device_shadow_t g_device_state = 
+{
+	.latitude = 0,
+	.longitude = 0,
+	.altitude = 0,
+	.batt_voltage = 0,
+	.led1_state = false
+};
+
 bool g_psm_granted = false;
 bool g_edrx_granted = false;
 
@@ -127,18 +135,40 @@ static int modem_configure(void)
 
 static void button_handler(uint32_t button_state, uint32_t has_changed)
 {
+	int err;
+	int json_len;
+	bool stock_message = false;
+
+	uint8_t json_payload[DEVICE_MSG_LEN];
+
+	json_len = device_to_json(json_payload, DEVICE_MSG_LEN, g_device_state);
+	if (json_len >= DEVICE_MSG_LEN || json_len < 0)
+	{
+		stock_message = true;
+		LOG_ERR("Failure in json packet creation");
+		LOG_ERR("Tried to make len %d msg %s", json_len, json_payload);
+	}
+
 	switch (has_changed)
 	{
 	case DK_BTN1_MSK:
 		/* When button 1 is pressed, call data_publish() to publish lat/long */
 		if (button_state & DK_BTN1_MSK)
 		{
-			int err = data_publish(&client, MQTT_QOS_1_AT_LEAST_ONCE,
-								   CONFIG_BUTTON_EVENT_PUBLISH_MSG, sizeof(CONFIG_BUTTON_EVENT_PUBLISH_MSG) - 1);
-			if (err)
+			if (stock_message)
 			{
-				LOG_INF("Failed to send message, %d", err);
-				return;
+				err = data_publish(&client, MQTT_QOS_1_AT_LEAST_ONCE,
+								   CONFIG_BUTTON_EVENT_PUBLISH_MSG, sizeof(CONFIG_BUTTON_EVENT_PUBLISH_MSG) - 1);
+				if (err)
+				{
+					LOG_INF("Failed to send message, %d", err);
+					return;
+				}
+			}
+			else
+			{
+				err = data_publish(&client, MQTT_QOS_1_AT_LEAST_ONCE,
+								   json_payload, json_len);
 			}
 		}
 		break;
@@ -233,7 +263,7 @@ int main(void)
 	err = modem_configure();
 	if (err)
 	{
-		LOG_ERR("Failed to configures the modem");
+		LOG_ERR("Failed to configure the modem");
 		return 0;
 	}
 
@@ -250,28 +280,6 @@ int main(void)
 	}
 
 	mqtt_try_connect();
-	// do_connect:
-	// 	if (connect_attempt++ > 0)
-	// 	{
-	// 		LOG_INF("Reconnecting in %d seconds...",
-	// 				CONFIG_MQTT_RECONNECT_DELAY_S);
-	// 		k_sleep(K_SECONDS(CONFIG_MQTT_RECONNECT_DELAY_S));
-	// 	}
-
-	// 	LOG_INF("Connection to broker using mqtt_connect");
-	// 	err = mqtt_connect(&client);
-	// 	if (err)
-	// 	{
-	// 		LOG_ERR("Error in mqtt_connect: %d", err);
-	// 		goto do_connect;
-	// 	}
-
-	// err = fds_init(&client, &fds);
-	// if (err)
-	// {
-	// 	LOG_ERR("Error in fds_init: %d", err);
-	// 	return 0;
-	// }
 
 	LOG_DBG("PSM: %d EDRX %d", g_psm_granted, g_edrx_granted);
 	err = gnss_init_and_start();
@@ -282,7 +290,7 @@ int main(void)
 	}
 
 	int mqtt_err = 0; // >=0 success
-	while (1) // main application loop
+	while (1)		  // main application loop
 	{
 		while (mqtt_err >= 0) // connection loop
 		{
@@ -302,15 +310,6 @@ int main(void)
 			mqtt_try_connect(); // reconnect
 		}
 	}
-
-	// LOG_INF("Disconnecting MQTT client");
-
-	// err = mqtt_disconnect(&client);
-	// if (err)
-	// {
-	// 	LOG_ERR("Could not disconnect MQTT client: %d", err);
-	// }
-	// goto do_connect;
 
 	/* This is never reached */
 	return 0;
