@@ -15,12 +15,18 @@ This example code monitors the state of LED1, battery percentage (via thingy91 o
 
 It connects to an mqtt broker of your choice and you can publish/subscribe to an arbitrary topic. It's an extension of the Nordic Developer Academy for cellular fundamentals [link](https://academy.nordicsemi.com/courses/cellular-iot-fundamentals), since there is a UDP+GNSS, COAP+GNSS, but not an MQTT+GNSS. Asset Tracker v2 is a bit dense and connects to nRF Cloud, this is a stripped down (unofficial) example. The academy covers how to add TLS, I did not feel it necessary here.
 
-##  Usage
+## Configuring
 Select your endpoint via prj.conf and the kconfigs `CONFIG_MQTT_PUB_TOPIC` and `CONFIG_MQTT_SUB_TOPIC`.
 
-You can publish to whatever you configure the sub topic to in order to control the state of LED1 on the device. Simply publish `LED1ON` OR `LED1OFF`.
-
 If you want to run this on a 9160DK, you need to remove the PMIC module and disable the kconfig `CONFIG_ADP536X`.
+
+[Kconfig](https://github.com/droidecahedron/thingy91_mqtt_simple/blob/main/Kconfig) has most of the configurations around timing.
+[prj.conf](https://github.com/droidecahedron/thingy91_mqtt_simple/blob/main/prj.conf) has the rest.
+
+
+##  Usage
+
+You can publish to whatever you configure the sub topic to in order to control the state of LED1 on the device. Simply publish `LED1ON` OR `LED1OFF`.
 
 You will want to monitor the logs to see when you get your first fix, until then lat/long/alt default to 0 as the device does not know where it is yet. There will be a log stating the coordinates and that the module is going to sleep.
 
