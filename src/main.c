@@ -18,6 +18,7 @@
 #include "datatypes/datatypes.h"
 #include "mqtt/mqtt_connection.h"
 #include "gnss/gnss.h"
+#include "pmic/pmic.h"
 
 /* The mqtt client struct */
 static struct mqtt_client client;
@@ -37,8 +38,10 @@ device_shadow_t g_device_state =
 	.led1_state = false
 };
 
+// dont feel like using sync primitives other than lte_connected
 bool g_psm_granted = false;
 bool g_edrx_granted = false;
+bool g_started_up = false;
 
 static void lte_handler(const struct lte_lc_evt *const evt)
 {
