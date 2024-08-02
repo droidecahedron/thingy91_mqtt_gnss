@@ -61,6 +61,7 @@ sensors | tasks and implementation for the onboard aqi sensor (bme680)
 > 
 > `SYS_INIT` a handy thing to read about and potentially use in case you are working on controlling something in both bootloader and application, and run into strange cases of application driver inits wiping any work done in the boot. (For example, having a pin stay high from boot to a specific execution in application). However, in the case of atv2 and peeling functionality out, it can make it harder to reason about what the code is doing. It also complicates error handling a bit as well.
 > Further reading here: [Zephyr project SYS_INIT doc](https://docs.zephyrproject.org/latest/doxygen/html/group__sys__init.html), [NCS Intermediate](https://academy.nordicsemi.com/courses/nrf-connect-sdk-intermediate/lessons/lesson-1-zephyr-rtos-advanced/topic/boot-up-sequence-execution-context/)
+
 > **[2]** :  You should use a lib for json (like coreJSON) but this gets the job done. JSON in general is a bit much for constrained devices, but aws likes it so I've just opted to manually craft the string.
 
 
