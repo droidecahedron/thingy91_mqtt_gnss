@@ -9,7 +9,7 @@
 - [Downloads (incl. schematic)](https://www.nordicsemi.com/Products/Development-hardware/Nordic-Thingy-91/Download)
 
 ## Overview
-This example code monitors the state of LED1, battery percentage (via thingy91 onboard pmic), and geographical location.
+This example code monitors the state of LED1, battery percentage (via thingy91 onboard pmic), air quality via onboard BME680 and geographical location.
 
 It connects to an mqtt broker of your choice and you can publish/subscribe to an arbitrary topic. Most of the information can be found at Nordic Developer Academy for cellular fundamentals [(link)](https://academy.nordicsemi.com/courses/cellular-iot-fundamentals).
 However, there is a UDP+GNSS, COAP+GNSS, but not an MQTT+GNSS. Asset Tracker v2 is a bit dense and connects to nRF Cloud, this is a stripped down unofficial example. The academy covers how to add TLS, I did not feel it necessary here.
