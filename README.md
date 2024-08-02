@@ -8,8 +8,6 @@
 - [Web manpage](https://docs.nordicsemi.com/category/thingy91-category)
 - [Downloads (incl. schematic)](https://www.nordicsemi.com/Products/Development-hardware/Nordic-Thingy-91/Download)
 
-*Should work on a 9160dk, but you need to remove the pmic config in `prj.conf`*
-
 ## Overview
 This example code monitors the state of LED1, battery percentage (via thingy91 onboard pmic), and geographical location.
 
@@ -19,11 +17,23 @@ However, there is a UDP+GNSS, COAP+GNSS, but not an MQTT+GNSS. Asset Tracker v2 
 ## Configuring
 Select your endpoint via prj.conf and the kconfigs `CONFIG_MQTT_PUB_TOPIC` and `CONFIG_MQTT_SUB_TOPIC`.
 
-If you want to run this on a 9160DK, you need to remove the PMIC module and disable the kconfig `CONFIG_ADP536X`.
-
 [Kconfig](https://github.com/droidecahedron/thingy91_mqtt_simple/blob/main/Kconfig) has most of the configurations around timing.
 [prj.conf](https://github.com/droidecahedron/thingy91_mqtt_simple/blob/main/prj.conf) has the rest.
 
+
+## Building
+
+For the Thingy91:
+
+```
+$ west build -b thingy91/nrf9160/ns -p auto
+```
+
+For the nRF9160-DK
+
+```
+$ west build -b nrf9160dk/nrf9160/ns -p auto
+```
 
 ##  Usage
 
