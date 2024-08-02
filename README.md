@@ -46,7 +46,7 @@ Push the button to upload a device state json string to your endpoint broker. If
 ![image](https://github.com/user-attachments/assets/7f5871e3-0b26-4e75-9673-72441118c226)
 
 
-All modules modify a global data structure that gets published.
+All modules modify a global data structure that gets published. Ideally you would use messaging or zbus and synchronization primitives. This code does not.
 Module | Function
 --|--
 main | Initialization and main connection logic
@@ -54,24 +54,28 @@ mqtt | mqtt connection implementation
 gnss | modem configurations and locationing logic
 pmic | (thingy91 specific) pmic initialization and periodic sampling **[1]**
 datatypes | struct for holding system data variables, and basic json snprintf for the struct. **[2]**
+sensors | tasks and implementation for the onboard aqi sensor (bme680)
 
-> **[1]** :  You should use a lib for json (like coreJSON) but this gets the job done. JSON in general is a bit much for constrained devices, but aws likes it so I've just opted to manually craft the string.
-
-> **[2]** : Thingy91 has an ADP5360 PMIC (shame it's not a Nordic nPM1300), but the atv2's sensor module does not init the device, it happens as a board init via SYS_INIT. This sample shows init and using it via start-up thread, or via SYS_INIT like the atv2/thingy91 board init does.
+> **[1]** : Thingy91 has an ADP5360 PMIC (shame it's not a Nordic nPM1300), but the atv2's sensor module does not init the device, it happens as a board init via SYS_INIT. This sample shows init and using it via start-up thread, or via SYS_INIT like the atv2/thingy91 board init does.
 > You change the `DEBUG_USE_SYSINIT` define in `pmic.h` to true/false depending on how you want it to swing. `thingy91_board_init` is broken out from the board init in the SDK which has a `SYS_INIT` that gets called. [**Here**](https://github.com/droidecahedron/thingy91_adp5360_simple/assets/63935881/9b8076cf-b1c9-422e-8dfe-1ba4d923207c) is a handy diagram for `SYS_INIT` that I like to refer to.
 > 
 > `SYS_INIT` a handy thing to read about and potentially use in case you are working on controlling something in both bootloader and application, and run into strange cases of application driver inits wiping any work done in the boot. (For example, having a pin stay high from boot to a specific execution in application). However, in the case of atv2 and peeling functionality out, it can make it harder to reason about what the code is doing. It also complicates error handling a bit as well.
 > Further reading here: [Zephyr project SYS_INIT doc](https://docs.zephyrproject.org/latest/doxygen/html/group__sys__init.html), [NCS Intermediate](https://academy.nordicsemi.com/courses/nrf-connect-sdk-intermediate/lessons/lesson-1-zephyr-rtos-advanced/topic/boot-up-sequence-execution-context/)
+> **[2]** :  You should use a lib for json (like coreJSON) but this gets the job done. JSON in general is a bit much for constrained devices, but aws likes it so I've just opted to manually craft the string.
+
+
 
 ## Terminal Shots
 
-**Device Side**
+**Device Side on button push**
 
-![image](https://github.com/user-attachments/assets/2db4bb38-33f3-4d79-b82e-be78ffd139d2)
+![image](https://github.com/user-attachments/assets/64686711-2e54-4e5d-ab6c-04427cf825ec)
+
 
 **Server side (via MQTT Explorer)**
 
-![image](https://github.com/user-attachments/assets/17ae83d8-2224-4c96-8cff-e0c70c3f626e)
+![image](https://github.com/user-attachments/assets/aa08122a-a4d8-4f42-9b85-e7d1f8516bdb)
+
 
 **Controlling LED**
 
