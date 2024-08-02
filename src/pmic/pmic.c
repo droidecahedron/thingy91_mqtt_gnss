@@ -15,7 +15,7 @@
 
 #define ADP536X_I2C_DEVICE DEVICE_DT_GET(DT_NODELABEL(i2c2))
 
-extern device_shadow_t g_device_state; 
+extern device_shadow_t g_device_state;
 extern bool g_started_up; // don't feel like using any sync primitives.
 
 LOG_MODULE_REGISTER(pmic, LOG_LEVEL_INF);
@@ -111,10 +111,11 @@ static int thingy91_board_init(void)
 
 int startup_thread(void)
 {
-    LOG_INF("STARTUP Thread: Not using SYS_INIT for pmic inits\n");
+    LOG_INF("STARTUP Thread: Not using SYS_INIT for pmic inits");
     if (thingy91_board_init() != 0)
-        printk("Could not initialize PMIC\n");
-
+    {
+        LOG_ERR("Could not initialize PMIC");
+    }
     LOG_INF("STARTUP thread starting Software timer to sample battery");
     uint8_t battery_percentage_startup;
     adp536x_fg_soc(&battery_percentage_startup); // quick read when starting up
