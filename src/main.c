@@ -27,7 +27,7 @@ static struct pollfd fds;
 
 static K_SEM_DEFINE(lte_connected, 0, 1);
 
-LOG_MODULE_REGISTER(nrf9160_mqtt_simple, LOG_LEVEL_INF);
+LOG_MODULE_REGISTER(nrf9160_mqtt_gnss, LOG_LEVEL_INF);
 
 device_shadow_t g_device_state = 
 {
