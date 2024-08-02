@@ -13,8 +13,7 @@ zephyr_include_directories(mqtt gnss datatypes pmic sensors) # can also do this 
 target_sources(app PRIVATE src/main.c
             src/datatypes/datatypes.c
             src/mqtt/mqtt_connection.c
-            src/gnss/gnss.c
-            src/pmic/pmic.c
-            src/sensors/bme680.c)
+            src/gnss/gnss.c)
 # NORDIC SDK APP END
 target_sources_ifdef(CONFIG_ADP536X app PRIVATE src/pmic/pmic.c)
+target_sources_ifdef(CONFIG_BME680 app PRIVATE src/sensors/bme680.c)

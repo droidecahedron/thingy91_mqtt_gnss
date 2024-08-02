@@ -28,7 +28,7 @@ static uint8_t payload_buf[CONFIG_MQTT_PAYLOAD_BUFFER_SIZE];
 /* MQTT Broker details. */
 static struct sockaddr_storage broker;
 
-LOG_MODULE_DECLARE(nrf9160_mqtt_simple);
+LOG_MODULE_DECLARE(nrf9160_mqtt_gnss);
 
 /**@brief Function to get the payload of recived data.
  */
@@ -186,7 +186,7 @@ void mqtt_evt_handler(struct mqtt_client *const c,
 				else if (strncmp(payload_buf, CONFIG_TURN_LED_OFF_CMD, sizeof(CONFIG_TURN_LED_OFF_CMD) - 1) == 0)
 				{
 					dk_set_led_off(LED_CONTROL_OVER_MQTT);
-					g_device_state.led1_state = true;
+					g_device_state.led1_state = false;
 				}
 				/* On failed extraction of data */
 				// Payload buffer is smaller than the received data
