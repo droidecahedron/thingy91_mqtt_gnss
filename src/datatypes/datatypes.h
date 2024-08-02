@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#define DEVICE_MSG_LEN 100 // some placeholder value for now.
+#define DEVICE_MSG_LEN 200 // some placeholder value for now.
 
 typedef struct device_shadow
 {
@@ -13,6 +13,10 @@ typedef struct device_shadow
 	double altitude; // skeptical
 	int batt_voltage;
 	bool led1_state; // false = off, true = on
+	int temperature; // you can do the arithmetic to convert these to float in bme680.c if you wish. the log shows how.
+	int pressure;
+	int relative_humidity;
+	int gas_res;
 
 } device_shadow_t;
 

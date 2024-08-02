@@ -39,7 +39,7 @@ config MQTT_PAYLOAD_BUFFER_SIZE
 	default 128
 
 config BUTTON_EVENT_PUBLISH_MSG
-	string "The message to publish on a button event"
+	string "The default message to publish on a button event"
 	default "Hi from the nRF9160 SiP"
 
 config TURN_LED_ON_CMD

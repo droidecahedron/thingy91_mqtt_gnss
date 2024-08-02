@@ -1,0 +1,8 @@
+#ifndef _BME680_H_
+#define _BME680_H
+
+#define STACKSIZE 1024
+#define AQI_THREAD_PRIORITY 8
+#define SENSOR_SAMPLE_INTERVAL_MS 20000
+
+#endif /* _BME680_H_ */
