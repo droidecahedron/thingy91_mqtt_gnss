@@ -14,7 +14,7 @@ This example code monitors the state of LED1, battery percentage (via thingy91 o
 It connects to an mqtt broker of your choice and you can publish/subscribe to an arbitrary topic. Most of the information can be found at Nordic Developer Academy for cellular fundamentals [(link)](https://academy.nordicsemi.com/courses/cellular-iot-fundamentals).
 However, there is a UDP+GNSS, COAP+GNSS, but not an MQTT+GNSS. Asset Tracker v2 is a bit dense and connects to nRF Cloud, this is a stripped down unofficial example. The academy covers how to add TLS, I did not feel it necessary here.
 
-This code uses few synchronization primitives or messaging methods to make certain parts of the application clearer and more explicit via globals instead of semaphores and zbus. In reality, you should use the latter.
+This code uses few synchronization primitives or messaging methods to make certain parts of the application clearer and more explicit via globals instead of semaphores and zbus/message queues. In reality, you should use the latter. Helpful links: [zbus](https://docs.zephyrproject.org/latest/services/zbus/index.html), [message queues](https://docs.zephyrproject.org/latest/kernel/services/data_passing/message_queues.html), [thread synchronization](https://academy.nordicsemi.com/courses/nrf-connect-sdk-fundamentals/lessons/lesson-8-thread-synchronization/)
 
 ## Configuring
 Select your endpoint via prj.conf and the kconfigs `CONFIG_MQTT_PUB_TOPIC` and `CONFIG_MQTT_SUB_TOPIC`.
