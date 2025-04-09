@@ -1,4 +1,5 @@
 # thingy91_mqtt_simple
+`nRF Connect SDK v2.9.1`
 
 ## hardware / documentation
 - Thingy91
